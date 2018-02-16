@@ -22,6 +22,7 @@ lazy val `signup-lagom-impl` = (project in file("signup-lagom-impl"))
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslTestKit,
+      lagomScaladslPersistenceCassandra,
       macwire,
       scalaTest
     )
