@@ -7,18 +7,18 @@ import play.api.libs.json.{Format, Json}
 
 object UsersService {
 
-  import scala.collection.mutable.ListBuffer
+  import scala.collection.mutable.Set
 
-  val list = ListBuffer[User]()
+  val set = Set[User]()
 
   def addUser(user: User): Boolean = {
-    list += user
+    set += user
     userExists(user)
   }
 
   def userExists(user: User): Boolean = {
-    println(list)
-    list.exists(_ == user)
+    println(set)
+    set.exists(_ == user)
   }
 
 }

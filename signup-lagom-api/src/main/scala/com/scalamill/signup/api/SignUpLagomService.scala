@@ -15,12 +15,12 @@ trait SignUpLagomService extends Service {
     * Example: curl http://localhost:9000/api/signup/admin/admin
     */
 
-  def signUp(user: User): ServiceCall[User, Boolean]
+  def signUp: ServiceCall[User, Boolean]
 
   override final def descriptor = {
     import Service._
-    named("orders").withCalls(
-      restCall(Method.POST,   "/api/signup/item", signUp _)
+    named("signup").withCalls(
+      restCall(Method.POST, "/api/signup/", signUp)
     ).withAutoAcl(true)
   }
 }

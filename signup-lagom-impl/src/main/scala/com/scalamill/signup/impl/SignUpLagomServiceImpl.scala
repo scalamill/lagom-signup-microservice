@@ -14,9 +14,9 @@ class SignUpLagomServiceImpl extends SignUpLagomService {
   /**
     * Example: curl http://localhost:9000/api/signup/admin/admin
     */
-  override def signUp(user: User): ServiceCall[NotUsed, Boolean] = ServiceCall {
+  override def signUp: ServiceCall[User, Boolean] = ServiceCall {
 
-    request => Future(UsersService.addUser(user))
+    request => Future(UsersService.addUser(request)) 
 
   }
 }
