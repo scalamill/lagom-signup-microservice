@@ -1,44 +1,42 @@
 package com.scalamill.signup.impl
+
 import java.time.LocalDateTime
+
+import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
+import com.lightbend.lagom.scaladsl.persistence._
+import com.scalamill.signup.api.User
+
 class SignUpLaogmPersistentEntity extends PersistentEntity {
 
-    override type command = CustomCommand[_]
-    override type Event = SignUpEvent
-    override type State = SignUpState
+  override type Command = Command
+  override type Event = SignUpEvent
+  override type State = UserState
 
-    override def initialState = UserState(None, LocalDateTime.now.toString)
+  override def initialState = UserState(None, LocalDateTime.now.toString)
 
-    override def behaviour : Behaviour =  {
-         
-         case SignUpState(user) =>  Actions().onCommand[UseGreetingMessage, Done] {
-
-      // Command handler for the UseGreetingMessage command
-      case (UseGreetingMessage(newMessage), ctx, state) =>
-        // In response to this command, we want to first persist it as a
-        // GreetingMessageChanged event
-        ctx.thenPersist(
-          GreetingMessageChanged(newMessage)
-        ) { _ =>
-          // Then once the event is successfully persisted, we respond with done.
-          ctx.reply(Done)
-        }
-
-    }
-
-    }
-
+  override def behavior: Behavior = Actions().onCommand[SignUpCommand, UserSignUpDone] {
+    case (SignUpCommand(user), ctx, state) =>
+      ctx.thenPersist(SignUpEvent(user, user.name)) {
+        _ => ctx.reply(UserSignUpDone(user.name))
+      }
+  }.onEvent { case SignUpEvent(user, userEntityId) =>
+    UserState(Some(user), LocalDateTime.now.toString)
+  }
 }
 
-case class UserState(user:Option[User], timeStamp:String)
+case class UserState(user: Option[User], timeStamp: String)
 
-case class SignUpEvent extends AggregateEvent[SignUpEvent] 
-{
-    user: User,
-    userEntityId:String 
+
+case class SignUpEvent(user: User, userEntityId: String) extends AggregateEvent[SignUpEvent] {
+  val Tag = AggregateEventTag.sharded[SignUpEvent](20)
+
+  override def aggregateTag: AggregateEventShards[SignUpEvent] = Tag
 }
 
-case class SignUpCommand extends ReplyType[Done] {
-    user: User
-}
+case class SignUpCommand(user: User) extends Command with ReplyType[UserSignUpDone]
 
-case class UserCurrentState extends ReplyType[Option[User]]
+case class UserSignUpDone(userId: String)
+
+sealed trait Command
+
+case object UserCurrentState extends ReplyType[Option[User]]
