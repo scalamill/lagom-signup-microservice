@@ -1,12 +1,12 @@
 package com.scalamill.signup.impl
-
+import java.time.LocalDateTime
 class SignUpLaogmPersistentEntity extends PersistentEntity {
 
     override type command = CustomCommand[_]
     override type Event = SignUpEvent
     override type State = SignUpState
 
-    override def initialState = SignUpState(User("", ""))
+    override def initialState = UserState(None, LocalDateTime.now.toString)
 
     override def behaviour : Behaviour =  {
          
@@ -29,7 +29,13 @@ class SignUpLaogmPersistentEntity extends PersistentEntity {
 
 }
 
-case class SignUpState(user:User)
+case class UserState(user:Option[User], timeStamp:String)
+
+case class SignUpEvent extends AggregateEvent[SignUpEvent] 
+{
+    user: User,
+    userEntityId:String 
+}
 
 case class SignUpCommand extends ReplyType[Done] {
     user: User
