@@ -7,9 +7,6 @@ import com.lightbend.lagom.scaladsl.server.{LagomApplication, LagomApplicationCo
 import com.scalamill.signin.api.SignInLagomService
 import play.api.libs.ws.ahc.AhcWSComponents
 
-/**
-  * Created by laxmi on 14/2/18.
-  */
 class SignInServiceLoader extends LagomApplicationLoader {
 
   override def load(context: LagomApplicationContext): LagomApplication =

@@ -13,7 +13,8 @@ lazy val `signup-lagom` = (project in file("."))
 lazy val `signup-lagom-api` = (project in file("signup-lagom-api"))
   .settings(
     libraryDependencies ++= Seq(
-      lagomScaladslApi
+      lagomScaladslApi,
+      lagomScaladslPersistenceCassandra
     )
   )
 
