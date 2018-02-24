@@ -4,6 +4,10 @@ version in ThisBuild := "1.0"
 // the Scala version that will be used for cross-compiled libraries
 scalaVersion in ThisBuild := "2.12.4"
 
+lagomCassandraEnabled in ThisBuild := false
+
+lagomUnmanagedServices in ThisBuild := Map("cas_native" -> "http://localhost:9042")
+
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.0" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % Test
 
