@@ -8,7 +8,7 @@ val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.0" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % Test
 
 lazy val `signup-lagom` = (project in file("."))
-  .aggregate(`signup-lagom-api`, `signup-lagom-impl`, `signin-lagom-api`, `signin-lagom-impl`, `persistence`)
+  .aggregate(`signup-lagom-api`, `signup-lagom-impl`, `signin-lagom-api`, `persistence`)
 
 lazy val `persistence` = (project in file("persistence"))
   .settings(
@@ -46,16 +46,5 @@ lazy val `signin-lagom-api` = (project in file("signin-lagom-api"))
     )
   )
 
-lazy val `signin-lagom-impl` = (project in file("signin-lagom-impl"))
-  .enablePlugins(LagomScala)
-  .settings(
-    libraryDependencies ++= Seq(
-      lagomScaladslTestKit,
-      macwire,
-      scalaTest
-    )
-  )
-  .settings(lagomForkedTestSettings: _*)
-  .dependsOn(`signin-lagom-api`, `persistence`)
 
 
