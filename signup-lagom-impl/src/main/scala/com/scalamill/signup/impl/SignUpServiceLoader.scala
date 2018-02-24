@@ -5,6 +5,7 @@ import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server.{LagomApplication, LagomApplicationContext, LagomApplicationLoader}
+import com.scalamill.persistence.{UserPersistenceEntity, UserPersistenceSerializationRegistry}
 import com.scalamill.signup.api.SignUpLagomService
 import play.api.libs.ws.ahc.AhcWSComponents
 
@@ -29,9 +30,9 @@ abstract class SignUpLagomApplication(context: LagomApplicationContext)
 
   override lazy val lagomServer = serverFor[SignUpLagomService](wire[SignUpLagomServiceImpl])
 
-  override lazy val jsonSerializerRegistry = HellolagomSerializerRegistry
+  override lazy val jsonSerializerRegistry = UserPersistenceSerializationRegistry
 
-  persistentEntityRegistry.register(wire[SignUpLaogmPersistentEntity])
+  persistentEntityRegistry.register(wire[UserPersistenceEntity])
 
 
 }

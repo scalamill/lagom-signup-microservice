@@ -2,11 +2,8 @@ package com.scalamill.signup.api
 
 import com.lightbend.lagom.scaladsl.api.transport.Method
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
-/**
-  * The signup-lagom service interface.
-  * This describes everything that Lagom needs to know about how to serve and
-  * consume the SignUpLagomService.
-  */
+import com.scalamill.persistence.{User, UserSignUpDone}
+
 trait SignUpLagomService extends Service {
 
   /**

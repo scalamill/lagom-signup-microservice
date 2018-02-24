@@ -3,9 +3,12 @@ package com.scalamill.signin.impl
 import com.lightbend.lagom.scaladsl.api.ServiceLocator
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server.{LagomApplication, LagomApplicationContext, LagomApplicationLoader}
+import com.scalamill.persistence.{UserPersistenceEntity, UserPersistenceSerializationRegistry}
 import com.scalamill.signin.api.SignInLagomService
 import play.api.libs.ws.ahc.AhcWSComponents
+
 
 class SignInServiceLoader extends LagomApplicationLoader {
 
@@ -22,11 +25,15 @@ class SignInServiceLoader extends LagomApplicationLoader {
 }
 
 abstract class SignInLagomApplication(context: LagomApplicationContext)
-  extends LagomApplication(context) with AhcWSComponents {
+  extends LagomApplication(context) with AhcWSComponents with
+    CassandraPersistenceComponents{
 
   import com.softwaremill.macwire._
 
+  override lazy val jsonSerializerRegistry = UserPersistenceSerializationRegistry
+
   override lazy val lagomServer = serverFor[SignInLagomService](wire[SignInLagomServiceImpl])
 
+  persistentEntityRegistry.register(wire[UserPersistenceEntity])
 
 }

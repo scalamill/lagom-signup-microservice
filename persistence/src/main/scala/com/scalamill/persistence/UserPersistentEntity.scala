@@ -1,16 +1,13 @@
-package com.scalamill.signup.impl
+package com.scalamill.persistence
 
 import java.time.LocalDateTime
 
-import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.lightbend.lagom.scaladsl.persistence._
 import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
-import com.scalamill.signup.api._
-import play.api.libs.json.{Format, Json, OFormat}
 
 import scala.collection.immutable.Seq
 
-class SignUpLaogmPersistentEntity extends PersistentEntity {
+class UserPersistenceEntity extends PersistentEntity {
 
   override type Command = CustomCommand
   override type Event = SignUpEvent
@@ -24,18 +21,16 @@ class SignUpLaogmPersistentEntity extends PersistentEntity {
         _ => ctx.reply(UserSignUpDone(user.name))
       }
   }.onEvent { case (SignUpEvent(user, userEntityId), state) =>
-    println("show current state" + user)
+//    println(state)
     UserState(Some(user), LocalDateTime.now.toString)
+  }.onReadOnlyCommand[SignInCommand, Boolean] {
+    case (SignInCommand(user), ctx, state) => ctx.reply(state.user.getOrElse(User("", "")) == user)
   }
 }
 
-
-
-
-
-object HellolagomSerializerRegistry extends JsonSerializerRegistry {
+object UserPersistenceSerializationRegistry extends JsonSerializerRegistry {
   override def serializers: Seq[JsonSerializer[_]] = Seq(
     JsonSerializer[UserSignUpDone],
     JsonSerializer[SignUpCommand]
-    )
+  )
 }

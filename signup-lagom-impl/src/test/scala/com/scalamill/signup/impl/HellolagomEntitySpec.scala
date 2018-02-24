@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.testkit.TestKit
 import com.lightbend.lagom.scaladsl.testkit.PersistentEntityTestDriver
 import com.lightbend.lagom.scaladsl.playjson.JsonSerializerRegistry
+import com.scalamill.persistence.HellolagomSerializerRegistry
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec}
 
 class HellolagomEntitySpec extends WordSpec with Matchers with BeforeAndAfterAll {
