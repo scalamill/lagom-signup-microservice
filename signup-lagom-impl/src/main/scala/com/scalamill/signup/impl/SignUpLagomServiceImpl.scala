@@ -1,8 +1,9 @@
 package com.scalamill.signup.impl
 
+import akka.NotUsed
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
-import com.scalamill.persistence.{SignUpCommand, User, UserPersistenceEntity, UserSignUpDone}
+import com.scalamill.persistence._
 import com.scalamill.signup.api.SignUpLagomService
 
 class SignUpLagomServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) extends SignUpLagomService {
@@ -10,12 +11,14 @@ class SignUpLagomServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)
     * Example: curl http://localhost:9000/api/signup/admin/admin
     */
   override def signUp: ServiceCall[User, UserSignUpDone] = ServiceCall {
+    user =>
+      val ref = persistentEntityRegistry.refFor[UserPersistenceEntity](user.name)
+      ref.ask(SignUpCommand(user))
+  }
 
+  override def signIn(name: String, password: String): ServiceCall[NotUsed, Boolean] = ServiceCall {
     request =>
-
-      val ref = persistentEntityRegistry.refFor[UserPersistenceEntity](request.name)
-
-      ref.ask(SignUpCommand(request))
-
+      val ref = persistentEntityRegistry.refFor[UserPersistenceEntity](name)
+      ref.ask(SignInCommand(User(name, password)))
   }
 }

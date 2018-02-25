@@ -14,9 +14,19 @@ object SignInCommand {
 
 }
 
+case class SignUpCommand(user: User) extends CustomCommand with ReplyType[UserSignUpDone]
+
 object SignUpCommand {
 
   implicit val format: Format[SignUpCommand] = Json.format
+
+}
+
+case class UserSignUpDone(userId: String)
+
+object UserSignUpDone {
+
+  implicit val format: Format[UserSignUpDone] = Json.format
 
 }
 
@@ -29,15 +39,6 @@ case class SignUpEvent(user: User, userEntityId: String) extends AggregateEvent[
   override def aggregateTag: AggregateEventTag[SignUpEvent] = SignUpEvent.Tag
 }
 
-case class SignUpCommand(user: User) extends CustomCommand with ReplyType[UserSignUpDone]
-
-case class UserSignUpDone(userId: String)
-
-object UserSignUpDone {
-
-  implicit val format: Format[UserSignUpDone] = Json.format
-
-}
 
 case class UserState(user: Option[User], timeStamp: String)
 
