@@ -8,7 +8,8 @@ import com.scalamill.signup.api.SignUpLagomService
 
 class SignUpLagomServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) extends SignUpLagomService {
   /**
-    * Example: curl http://localhost:9000/api/signup/admin/admin
+    * Example: curl http://localhost:9000/api/signin/admin/admin
+    * Example: curl -X POST   http://localhost:9000/api/signup/ -H 'content-type: application/json' -d '{"name":"admin", "password":"admin"}'
     */
   override def signUp: ServiceCall[User, UserSignUpDone] = ServiceCall {
     user =>

@@ -9,7 +9,8 @@ import com.scalamill.persistence.{User, UserSignUpDone}
 trait SignUpLagomService extends Service {
 
   /**
-    * Example: curl http://localhost:9000/api/signup/admin/admin
+    * Example: curl http://localhost:9000/api/signin/admin/admin
+    * Example: curl -X POST   http://localhost:9000/api/signup/ -H 'content-type: application/json' -d '{"name":"admin", "password":"admin"}'
     */
 
   def signUp: ServiceCall[User, UserSignUpDone]
